@@ -1,0 +1,15 @@
+{
+  "name": "fluent-arcade",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Prática de inglês do A1 ao C2 com minijogos e progresso local.",
+  "scripts": {
+    "build": "node build.cjs",
+    "test": "node tests/verify.cjs && node tests/arcade.cjs && node tests/game-regressions.cjs && node tests/storage.cjs && node tests/catalog.cjs",
+    "test:browser": "node tests/browser.cjs",
+    "check": "npm run build && npm test"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
