@@ -7,6 +7,7 @@
     "build": "node build.cjs",
     "test": "node tests/verify.cjs && node tests/arcade.cjs && node tests/game-regressions.cjs && node tests/storage.cjs && node tests/catalog.cjs",
     "test:browser": "node tests/browser.cjs",
+    "test:interface": "node tests/interface.cjs",
     "check": "npm run build && npm test"
   },
   "engines": {

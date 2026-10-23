@@ -4,7 +4,7 @@ const read=p=>fs.readFileSync(path.join(__dirname,p),'utf8');
 let html=read('src/base.html');
 // Defer loading v2 to the arcade validator; v1 still uses its original validator before migration.
 html=html.replace('return raw?validateState(JSON.parse(raw)):fresh();','return raw?(JSON.parse(raw).version===2?fresh():validateState(JSON.parse(raw))):fresh();');
-html=html.replace('</style>',['src/arcade.css','src/catalog.css','src/linear.css'].map(read).join('\n')+'\n</style>');
+html=html.replace('</style>',['src/arcade.css','src/catalog.css','src/linear.css','src/interface.css'].map(read).join('\n')+'\n</style>');
 html=html.replace('</body>','<script>\n'+['src/games.js','src/arcade.js','src/storage.js','src/catalog.js','src/linear.js'].map(read).join('\n')+'\n</script>\n</body>');
 html=html.replace('<title>Fluent — Inglês em movimento</title>','<title>Fluent — Inglês do A1 ao C2</title>');
 html=html.replace('Inglês para a vida real. Uma trilha de prática do A1 ao C2, com sessões curtas e progresso salvo no seu dispositivo.','Descubra seu nível de inglês e avance em uma trilha linear do A1 ao C2, com atividades de leitura e escrita.');

@@ -12,7 +12,9 @@ const LINEAR_LEVEL_COPY=[
 const previousLinearHeader=header;
 header=function(){
  previousLinearHeader();
- const nav=[['home','home','Minha trilha'],['path','map','Percurso completo'],['settings','settings','Preferências']];
+ document.body.classList.toggle('activity-focus',view==='exercise'||view==='summary');
+ document.body.classList.toggle('exercise-focus',view==='exercise');
+ const nav=[['home','home','Início'],['path','map','Trilha'],['settings','settings','Ajustes']];
  $('#nav').innerHTML=nav.map(([viewId,iconId,label])=>`<button data-nav="${viewId}" class="${view===viewId?'active':''}" ${view===viewId?'aria-current="page"':''}>${icon(iconId)}<span>${label}</span></button>`).join('');
  $('#crumb').textContent='/ '+(nav.find(item=>item[0]===view)?.[2]||'Aprendizado');
 };
@@ -20,7 +22,9 @@ header=function(){
 const previousLinearNavigate=navigate;
 navigate=function(destination){
  if(['arcade','daily','review'].includes(destination))destination='path';
- return previousLinearNavigate(destination);
+ const result=previousLinearNavigate(destination);
+ if(destination!=='exercise'){activityActionObserver?.disconnect();syncActivityKeyboard();}
+ return result;
 };
 
 mastered=function(ui){return (state.passes[ui]||0)>=1;};
@@ -88,61 +92,88 @@ advance=function(){
  return previousLinearAdvance();
 };
 
-const previousLinearRenderExercise=renderExercise;
+function focusHeaderHTML(active){
+ const placement=active.mode==='placement',completed=active.i+(active.feedback?1:0),total=placement?18:active.ids.length;
+ const label=placement?'Descobrindo seu nível':UNITS[active.unit].title;
+ return `<header class="focus-header"><button class="focus-exit icon-btn" data-action="pause" aria-label="Salvar e sair da atividade" title="Salvar e sair">${icon('close')}</button><div class="focus-progress"><div class="focus-progress-label"><span>${esc(label)}</span><span>${placement?`${LEVELS[active.level]} · ${active.i%3+1} de 3`:`${active.i+1} de ${total}`}</span></div><div class="focus-meter" role="progressbar" aria-label="${placement?'Progresso da descoberta, até 18 atividades':'Progresso da unidade'}" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${completed}"><span style="width:${completed/total*100}%"></span></div></div></header>`;
+}
 function assessmentCheckpoint(){
  const active=state.active,level=active.level,results=active.answers.slice(-3),correct=results.filter(answer=>answer.ratio>=.7).length;
  return `<section class="level-reveal" aria-live="polite"><div class="level-reveal-art"><span class="reveal-ring"></span><img src="assets/papagaio-azul.png" alt="Papagaio Azul comemorando seu progresso"></div><div class="eyebrow">SINAL DE PROGRESSO · ${LEVELS[level]}</div><h1>${correct===3?'Que salto!':correct===2?'Temos uma pista.':'Cada resposta ajudou a ajustar o próximo passo.'}</h1><p>Você concluiu esta etapa de leitura e escrita. Vamos conferir como se sente no próximo nível.</p><div class="reveal-evidence" aria-label="Resultado das três atividades">${results.map((answer,index)=>`<span class="evidence-dot ${answer.ratio>=.7?'is-correct':'needs-practice'}" title="Atividade ${index+1}: ${Math.round(answer.ratio*100)}%"></span>`).join('')}<strong>${correct}/3</strong></div><div class="assessment-levels">${LEVELS.map((name,index)=>`<span class="assessment-level ${index<level?'passed':index===level?'current':''}">${name}</span>`).join('')}</div><button class="btn" id="assessment-continue" data-action="advance">Continuar descoberta ${icon('arrow')}</button><p class="tiny muted">Sem cronômetro. Você pode parar e retomar quando quiser.</p></section>`;
 }
 renderExercise=function(){
- previousLinearRenderExercise();
- const active=state.active;if(!active)return;
- if(active.mode==='placement'){
-  if(active.mini.checkpoint){$('#app').innerHTML=assessmentCheckpoint();$('#assessment-continue')?.focus({preventScroll:true});return;}
-  const step=active.i+1,bandStep=active.i%3+1,level=LEVELS[active.level];
-  const strip=`<div class="assessment-strip"><div class="assessment-strip-top"><span class="eyebrow">DESCOBERTA DO SEU NÍVEL</span><span class="assessment-counter">${String(step).padStart(2,'0')} <span>/ até 18</span></span></div><div class="assessment-band">${LEVELS.map((name,index)=>`<span class="assessment-level ${index<active.level?'passed':index===active.level?'current':''}">${name}</span>`).join('')}</div><div class="assessment-note"><span class="assessment-pulse"></span><span>Investigando <strong>${level}</strong> · etapa ${bandStep} de 3 · ${LINEAR_LEVEL_COPY[active.level]}</span></div></div>`;
-  const section=$('#question-card');
-  if(section?.insertAdjacentHTML)section.insertAdjacentHTML('beforebegin',strip);
-  else $('#app').innerHTML=$('#app').innerHTML.replace('<section class="question-card game-stage"',strip+'<section class="question-card game-stage"');
-  return;
+ const active=state.active;if(!active){navigate('home');return;}
+ header();
+ if(active.mode==='placement'&&active.mini.checkpoint){
+  $('#app').innerHTML=`<div class="exercise-wrap focus-checkpoint">${focusHeaderHTML(active)}${assessmentCheckpoint()}</div>`;
+  $('#assessment-continue')?.focus({preventScroll:true});observeActivityActions();return;
  }
- if(active.mode==='session'){
-  const completed=UNITS.filter(unit=>mastered(unit.id)).length-(state.placement||0)*3;
-  const pathStrip=`<div class="linear-session-strip"><div><span class="eyebrow">${LEVELS[active.level]} · UNIDADE ${(active.unit%3)+1} DE 3</span><strong>${esc(UNITS[active.unit].title)}</strong></div><span>${Math.max(0,completed)} / ${18-(state.placement||0)*3} unidades</span></div>`;
-  const section=$('#question-card');if(section?.insertAdjacentHTML)section.insertAdjacentHTML('beforebegin',pathStrip);
- }
+ const game=currentGame(),mini=active.mini,type=GAME_TYPES[game.type],feedback=mini.feedback;
+ const answered=Boolean(active.feedback||feedback),canSubmit=['chat','tone','trap','reading','surgery'].includes(game.type)||(game.type==='redpen'&&mini.target!==null);
+ const focused=document.activeElement,slotFocus=focused?.dataset?.slot;
+ const helper=game.type==='story'?'Escolha uma resposta para continuar.':game.type==='redpen'?'Toque no trecho que precisa de correção.':'Escolha onde a palavra se encaixa.';
+ const lesson=active.mode==='session'&&active.i===0?`<details class="focus-lesson"><summary>${icon('book')}Uma dica para esta unidade <span>+</span></summary><p>${esc(UNITS[active.unit].lesson)}</p><p lang="en">${esc(UNITS[active.unit].example)}</p></details>`:'';
+ const action=answered?`<button class="btn ${(active.feedback?.correct??feedback?.correct)?'correct':''}" data-action="advance" id="primary-action">${active.feedback&&active.i===active.ids.length-1&&active.mode!=='placement'?'Ver resultado':'Continuar'}${icon('arrow')}</button>`:canSubmit?'<button class="btn" data-action="submit" id="primary-action" disabled>Verificar resposta</button>':`<span class="focus-action-hint">${helper}</span>`;
+ $('#app').innerHTML=`<div class="exercise-wrap">${focusHeaderHTML(active)}<section class="question-card game-stage" id="question-card"><div class="focus-activity-label"><span>${icon(type[1])}${type[0]}</span><span>${game.level}</span></div><h1 id="activity-title" tabindex="-1">${esc(game.title)}</h1><div class="focus-stage">${stageHTML(game)}</div>${feedback?`<div class="focus-feedback" tabindex="-1">${feedbackBlock(feedback)}</div>`:''}${lesson}</section><footer class="focus-actions ${answered?'has-feedback':''}"><div class="focus-actions-inner">${answered?'':`<button class="btn ghost" data-action="skip">Pular</button>`}${action}</div></footer></div>`;
+ updateSubmit();observeActivityActions();
+ if(answered){$('#primary-action')?.focus({preventScroll:true});requestAnimationFrame(()=>{if(view==='exercise'&&state.active===active&&state.active.mini===mini)$('.focus-feedback')?.scrollIntoView({block:'nearest',behavior:'instant'});});}
+ else if(slotFocus!==undefined&&/^\d+$/.test(slotFocus))$(`[data-slot="${slotFocus}"]`)?.focus({preventScroll:true});
+ else if(game.type==='redpen'&&mini.target!==null&&focused?.dataset?.red!==undefined)$('#answer')?.focus();
+ else $('#activity-title')?.focus({preventScroll:true});
 };
 
-function learningMapHTML(){
+// Reserve the actual action-bar height so large text never covers an answer.
+let activityActionObserver;
+function observeActivityActions(){
+ activityActionObserver?.disconnect();
+ const actions=$('.focus-actions');
+ const measure=()=>document.documentElement.style.setProperty('--activity-actions-height',`${actions?.getBoundingClientRect().height||0}px`);
+ measure();
+ if(actions&&typeof ResizeObserver!=='undefined'){activityActionObserver=new ResizeObserver(measure);activityActionObserver.observe(actions);}
+}
+function syncActivityKeyboard(){
+ const viewport=window.visualViewport,typing=view==='exercise'&&document.activeElement?.matches?.('input,textarea');
+ const offset=viewport&&typing?Math.max(0,window.innerHeight-viewport.height-viewport.offsetTop):0;
+ document.documentElement.style.setProperty('--keyboard-offset',`${Math.round(offset)}px`);
+ document.body.classList.toggle('keyboard-open',Boolean(typing&&offset>80));
+}
+window.visualViewport?.addEventListener('resize',syncActivityKeyboard);
+window.visualViewport?.addEventListener('scroll',syncActivityKeyboard);
+document.addEventListener('focusin',syncActivityKeyboard);
+document.addEventListener('focusout',()=>requestAnimationFrame(syncActivityKeyboard));
+
+function learningMapHTML(compact=false){
  const task=nextTask(),startUnit=state.placement===null?0:state.placement*3;
  return `<section class="learning-map" aria-label="Percurso linear do A1 ao C2">${LEVELS.map((level,li)=>{
+  if(compact&&li!==task.level)return '';
   const units=UNITS.slice(li*3,li*3+3),available=state.placement!==null&&units.some(unit=>unitUnlocked(unit.id)),levelDone=units.every(unit=>mastered(unit.id));
-  return `<section class="map-level ${available?'is-open':''} ${levelDone?'is-done':''}"><div class="map-level-head"><span class="map-level-mark">${levelDone?icon('check'):String(li+1).padStart(2,'0')}</span><div><span class="eyebrow">NÍVEL ${level}</span><h2>${LEVEL_NAMES[li]}</h2></div><span class="map-level-status">${state.placement===null?'a descobrir':levelDone?'concluído':available?'em andamento':'a seguir'}</span></div><p class="map-level-focus">${LINEAR_LEVEL_COPY[li]}</p><div class="map-units">${units.map((unit,index)=>{
-   const below=state.placement!==null&&unit.id<startUnit,done=mastered(unit.id)&&!below,current=state.placement!==null&&task.unit===unit.id&&!state.active,locked=state.placement===null||(!below&&!done&&!current&&unit.id>task.unit);
-   const status=below?'abaixo do ponto de entrada':done?'concluída':current?'próxima etapa':'bloqueada';
+  return `<details class="map-level ${available?'is-open':''} ${levelDone?'is-done':''}" ${compact||li===task.level?'open':''}><summary class="map-level-head"><span class="map-level-mark">${levelDone?icon('check'):level}</span><span class="map-level-heading"><span class="eyebrow">NÍVEL ${level}</span><strong>${LEVEL_NAMES[li]}</strong></span><span class="map-level-status">${state.placement===null?'a descobrir':levelDone?'concluído':li===task.level?'atual':'a seguir'}</span><span class="map-chevron">${icon('arrow')}</span></summary><p class="map-level-focus">${LINEAR_LEVEL_COPY[li]}</p><div class="map-units">${units.map((unit,index)=>{
+   const below=state.placement!==null&&unit.id<startUnit,done=mastered(unit.id)&&!below,current=state.placement!==null&&task.unit===unit.id&&!done,locked=state.placement===null||(!below&&!done&&!current&&unit.id>task.unit);
+   const status=below?'avaliada':done?'concluída':current?(state.active?'em andamento':'próxima etapa'):'a seguir';
    return `<div class="map-unit ${done?'is-done':''} ${current?'is-current':''} ${locked?'is-locked':''} ${below?'is-assessed':''}"><span class="map-unit-node">${done?icon('check'):below?'↗':String(index+1).padStart(2,'0')}</span><div class="map-unit-copy"><strong>${esc(unit.title)}</strong><span>${esc(unit.canDo)}</span></div><span class="map-unit-status">${status}</span></div>`;
-  }).join('')}</div></section>`;
+  }).join('')}</div></details>`;
  }).join('')}</section>`;
 }
 
 function progressHeadline(task){
- if(task.mode==='placement')return {tag:'UMA DESCOBERTA, SEIS NÍVEIS',title:'Onde seu inglês começa?',description:'Um percurso rápido e adaptativo, feito só de leitura e escrita. Suas respostas mostram por onde seguir.'};
- if(task.mode==='resume')return state.active.mode==='placement'?{tag:'SUA DESCOBERTA ESTÁ SALVA',title:'Vamos continuar de onde paramos?',description:'O papagaio guardou seu progresso. Retome sem perder as respostas anteriores.'}:{tag:'SUA TRILHA CONTINUA',title:'Mais um passo no seu inglês.',description:UNITS[task.unit].canDo};
- if(task.mode==='complete')return {tag:'PERCURSO CONCLUÍDO',title:'Você chegou ao C2.',description:'Você percorreu todas as etapas do A1 ao C2, com prática de leitura e escrita em situações reais.'};
+ if(task.mode==='placement')return {tag:'SEU PRIMEIRO PASSO',title:'Seu inglês tem um ponto de partida.',description:'Descubra o seu com situações de leitura e escrita que se adaptam às suas respostas.'};
+ if(task.mode==='resume')return state.active.mode==='placement'?{tag:'DESCOBERTA EM ANDAMENTO',title:'Vamos de onde você parou.',description:'Suas respostas estão salvas. Continue descobrindo seu ponto de partida.'}:{tag:'SUA PRÓXIMA ETAPA',title:UNITS[task.unit].title,description:UNITS[task.unit].canDo};
+ if(task.mode==='complete')return {tag:'PERCURSO CONCLUÍDO',title:'Um caminho inteiro de conquistas.',description:'Você concluiu a trilha de leitura e escrita até o C2. Veja as etapas do seu percurso.'};
  return {tag:`${LEVELS[task.level]} · UNIDADE ${(task.unit%3)+1}`,title:UNITS[task.unit].title,description:UNITS[task.unit].canDo};
 }
 function learningHero(){
  const task=nextTask(),copy=progressHeadline(task),button=task.mode==='placement'?'Descobrir meu nível':task.mode==='resume'?'Retomar percurso':task.mode==='complete'?'Ver percurso completo':'Continuar aprendendo';
  const progress=state.placement===null?0:Math.round((UNITS.filter(unit=>mastered(unit.id)).length/18)*100);
- return `<section class="linear-hero ${task.mode==='placement'?'discovery-hero':''}"><div class="linear-hero-copy"><span class="eyebrow">${copy.tag}</span><h1>${copy.title}</h1><p>${copy.description}</p>${task.mode==='placement'?'<div class="discovery-promise"><span>LEITURA</span><i></i><span>ESCRITA</span><i></i><span>A1 → C2</span></div>':`<div class="journey-progress"><div class="journey-progress-copy"><span>SEU PERCURSO</span><strong>${progress}%</strong></div><div class="journey-meter" role="progressbar" aria-label="Progresso do percurso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}"><span style="--journey-progress:${progress}%"></span></div></div>`}<button class="btn linear-cta" data-action="next">${button} ${icon('arrow')}</button><p class="linear-reassurance">${task.mode==='placement'?'Sem áudio, sem microfone e sem cronômetro.':'Uma etapa de cada vez. Seu progresso fica salvo neste dispositivo.'}</p></div><div class="linear-hero-art" aria-hidden="true"><span class="parrot-sun"></span><img src="assets/papagaio-azul.png" alt=""><span class="parrot-speech">${task.mode==='placement'?'Oi! Vamos descobrir?':'Vamos juntos!'}</span><span class="parrot-star">✦</span></div></section>`;
+ return `<section class="linear-hero ${task.mode==='placement'?'discovery-hero':''}"><div class="linear-hero-copy"><span class="eyebrow">${copy.tag}</span><h1>${copy.title}</h1><p>${copy.description}</p>${task.mode==='placement'?'<div class="discovery-promise"><span>LEITURA</span><i></i><span>ESCRITA</span><i></i><span>A1 → C2</span></div>':`<div class="journey-progress"><div class="journey-progress-copy"><span>SEU PERCURSO</span><strong>${progress}%</strong></div><div class="journey-meter" role="progressbar" aria-label="Progresso do percurso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}"><span style="--journey-progress:${progress}%"></span></div></div>`}<button class="btn linear-cta" ${task.mode==='complete'?'data-nav="path"':'data-action="next"'}>${button} ${icon('arrow')}</button><p class="linear-reassurance">${task.mode==='placement'?'No seu ritmo. Só leitura e escrita.':'Seu progresso é salvo automaticamente.'}</p></div><div class="linear-hero-art" aria-hidden="true"><span class="parrot-sun"></span><img src="assets/papagaio-azul.png" alt=""><span class="parrot-star">✦</span></div></section>`;
 }
 
 renderHome=function(){
- const task=nextTask(),copy=progressHeadline(task);
- $('#app').innerHTML=`${learningHero()}<div class="learning-home-heading"><div><span class="eyebrow">A LINHA DO SEU APRENDIZADO</span><h2>${state.placement===null?'O percurso completo, em ordem.':'Sua próxima conquista está no caminho.'}</h2></div><span>${state.placement===null?'6 níveis · 18 unidades':`${LEVELS[state.placement]} a C2 · 18 unidades`}</span></div>${learningMapHTML()}<div class="learning-footnote">${icon('shield')} A avaliação indica um ponto de partida em leitura e escrita; não é uma certificação oficial de nível.</div>`;
+ const discovering=state.placement===null;
+ $('#app').innerHTML=`<div class="home-intro"><div><span class="eyebrow">SEU ESPAÇO DE APRENDIZADO</span><h2>Um passo de cada vez.</h2></div><span class="home-level-pill">${discovering?'A1 → C2':LEVELS[nextTask().level]}</span></div>${learningHero()}<div class="learning-home-heading"><h2>${discovering?'Uma trilha feita para você':'Seu capítulo atual'}</h2><button class="text-btn" data-nav="path">Ver trilha ${icon('arrow')}</button></div>${discovering?`<ol class="journey-onboarding"><li><span>01</span><div><strong>Encontre seu ponto de partida</strong><p>As perguntas se ajustam ao seu inglês.</p></div></li><li><span>02</span><div><strong>Aprenda em situações reais</strong><p>Leia, traduza, escreva e faça escolhas.</p></div></li><li><span>03</span><div><strong>Avance uma etapa por vez</strong><p>Cada unidade prepara a próxima.</p></div></li></ol>`:learningMapHTML(true)}<div class="learning-footnote">${icon('shield')}${discovering?'A avaliação estima seu ponto de entrada em leitura e escrita.':'Seu percurso fica salvo neste navegador.'}</div>`;
 };
 renderPath=function(){
  const task=nextTask();
- $('#app').innerHTML=`<div class="path-page-heading"><span class="eyebrow">SEU PERCURSO · A1 → C2</span><h1>Uma linha clara até o domínio.</h1><p>As etapas são liberadas em sequência. Cada unidade mistura leitura, escrita e situações diferentes.</p></div>${learningHero()}${learningMapHTML()}`;
+ $('#app').innerHTML=`<div class="path-page-heading"><span class="eyebrow">6 NÍVEIS · 18 UNIDADES</span><h1>Seu inglês, etapa por etapa.</h1><p>Um percurso de leitura e escrita, do seu ponto de partida até o C2.</p></div><div class="path-continue"><span>${task.mode==='placement'?'Comece descobrindo seu nível.':task.mode==='complete'?'Todas as etapas concluídas.':'Sua próxima etapa está pronta.'}</span>${task.mode==='complete'?'':`<button class="btn" data-action="next">${task.mode==='placement'?'Descobrir nível':'Continuar'}${icon('arrow')}</button>`}</div>${learningMapHTML()}`;
 };
 renderArcade=function(){renderPath();};
 renderDaily=function(){renderPath();};
@@ -156,6 +187,7 @@ renderSummary=function(){
  const mascotLine=placement?result.level>=4?'Você já navega por estruturas avançadas. Agora vamos lapidar precisão e nuance.':result.level>=2?'Você já consegue lidar com várias situações reais. Vamos consolidar sua próxima etapa.':'Todo começo conta. Agora você tem um ponto de partida feito para você.':result.passed?'Mais uma etapa virou conhecimento seu.': 'Errar apontou o próximo ajuste. Vamos usá-lo no caminho.';
  $('#app').innerHTML=`<section class="learning-result ${placement?'placement-result':''} ${result.passed?'result-success':'result-practice'}"><div class="result-mascot"><img src="assets/papagaio-azul.png" alt="Papagaio Azul acompanhando seu percurso"></div><span class="eyebrow">${placement?'DESCOBERTA CONCLUÍDA':result.passed?'ETAPA CONCLUÍDA':'UM PASSO DE APRENDIZADO'}</span><h1>${title}</h1><p class="result-description">${description}</p>${placement?`<div class="level-result-orbit"><span class="orbit-glow"></span><strong>${LEVELS[result.level]}</strong><span>PONTO DE PARTIDA</span></div><div class="result-level-row">${LEVELS.map((level,index)=>`<span class="assessment-level ${index<result.level?'passed':index===result.level?'current':''}">${level}</span>`).join('')}</div>`:`<div class="unit-result"><span class="unit-result-number">${String(result.unit+1).padStart(2,'0')}</span><div><strong>${esc(UNITS[result.unit].title)}</strong><span>${Math.round(result.ratio*100)}% de precisão · ${result.correct} de ${result.total} atividades</span></div><span class="unit-result-xp">+${result.xp} XP</span></div>`}<div class="mascot-message"><span class="mascot-message-mark">✦</span><p>${mascotLine}</p></div><button class="btn linear-cta" data-action="next">${placement?`Começar por ${LEVELS[result.level]}`:complete?'Ver percurso completo':result.passed?'Seguir para a próxima unidade':'Continuar nesta unidade'} ${icon('arrow')}</button><p class="result-note">${placement?'Estimativa de entrada baseada somente em leitura e escrita.':`Seu próximo passo: ${task.mode==='complete'?'fim do percurso':task.mode==='session'?`unidade ${task.unit+1} · ${LEVELS[task.level]}`:'retomar sua sessão'}.`}</p></section>`;
  if(!placement){const xp=$('.unit-result-xp');if(xp)xp.setAttribute('aria-label',`${result.xp} XP conquistados`);}
+ $('#app').insertAdjacentHTML('afterbegin',`<div class="result-top"><button class="text-btn" data-nav="home">${icon('close')}Voltar ao início</button></div>`);
 };
 
 renderSettings=function(){
@@ -170,6 +202,5 @@ function clearOutOfPathSession(){
  toast(usesVoice?'A atividade salva foi retomada pela trilha de leitura e escrita.':'A trilha agora segue em sequência. Seu progresso concluído foi mantido.');
 }
 
-const previousLinearStorageReady=()=>{};
 clearOutOfPathSession();
 header();renderHome();

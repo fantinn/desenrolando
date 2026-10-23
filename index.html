@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="theme-color" content="#6554d9">
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -286,6 +286,156 @@
  .linear-hero-art>img,.level-reveal-art img,.result-mascot img,.parrot-speech,.parrot-star,.assessment-pulse,.map-unit.is-current .map-unit-node{animation:none!important}
  .journey-meter span{transition:none!important}
 }
+
+/* Mobile-first interface and immersive learning mode. */
+:root{--bg:#f5f7fb;--paper:#fff;--ink:#16243c;--muted:#607087;--line:#e3e9f1;--accent:#215ed6;--accent-dark:#184bb0;--soft:#edf3ff;--green:#147a56;--green-bg:#e9f6ef;--red:#b43e50;--red-bg:#fff0f2;--shadow:0 4px 24px #132c5010;--activity-actions-height:90px;--keyboard-offset:0px;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button,a,input,textarea,summary{touch-action:manipulation}
+button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #91b9ff;outline-offset:4px}
+.btn{min-height:52px;border-radius:14px;font-size:15px;font-weight:650;letter-spacing:-.15px}
+.btn:hover{transform:none}.btn:active{transform:scale(.985)}.btn.ghost{color:var(--muted)}
+.icon-btn{min-width:46px;min-height:46px;border-radius:14px}
+.text-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 0;font-size:13px;font-weight:650}
+.text-btn svg{width:16px;height:16px}.eyebrow{font-size:10px;letter-spacing:1.3px;line-height:1.6}
+.shell{max-width:1440px}.sidebar{width:216px;padding:32px 20px;background:var(--paper)}
+.sidebar .brand{font-size:27px}.tagline{margin:8px 0 36px 45px}.sidebar-bottom .mini-note{display:none}
+.main{margin-left:216px}.content{max-width:1016px;padding:32px 40px 64px}
+.topbar{height:80px;padding:0 40px;background:transparent;border:0}
+.breadcrumb{font-size:12px}.breadcrumb span{font-weight:600}
+.stat-inline{padding:8px 12px;border:1px solid var(--line);border-radius:99px;background:var(--paper);font-size:12px}
+.nav button{min-height:50px;font-size:14px;border-radius:13px}.nav button.active{box-shadow:inset 3px 0 var(--accent)}
+.home-intro{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 22px}
+.home-intro .eyebrow{color:var(--muted)}.home-intro h2{margin-top:5px;font-size:24px;letter-spacing:-.7px}
+.home-level-pill{flex:none;border:1px solid var(--line);border-radius:99px;padding:8px 12px;color:var(--accent);background:var(--paper);font-size:12px;font-weight:750}
+
+/* One prominent next step; the mascot supports the action. */
+.linear-hero,.discovery-hero{display:block;min-height:0;padding:36px;border:1px solid #244577;border-radius:24px;background:radial-gradient(ellipse at 100% 0,#255b9c 0,transparent 58%),#122b4d;color:#fff;box-shadow:0 14px 32px #142e4e12;animation:none}
+.linear-hero:before{display:none}.linear-hero-copy{max-width:calc(100% - 190px)}
+.linear-hero-copy>.eyebrow{color:#b8d3ff}.linear-hero-copy h1{max-width:520px;font-size:clamp(30px,3.3vw,42px);line-height:1.13;letter-spacing:-1.4px;margin:12px 0 16px}
+.linear-hero-copy>p{color:#cedcf0;font-size:15px;line-height:1.65;max-width:460px}
+.linear-hero .linear-cta{background:#fff;color:#163d74;border-color:#fff;min-height:54px;box-shadow:0 4px 12px #07193120}
+.linear-hero .linear-cta:hover{background:#edf4ff}.linear-reassurance{margin-top:12px!important;color:#afc7e6!important;font-size:11px!important;line-height:1.5!important}
+.linear-hero-art{right:12px;top:38px;bottom:auto;width:230px;height:270px;pointer-events:none;opacity:1}
+.linear-hero-art>img{filter:drop-shadow(0 18px 20px #06152c45);animation:none}
+.parrot-sun{width:174px;height:174px;top:32px;right:12px;border:1px solid #6a9ad55c;background:#3777be35;box-shadow:0 0 0 20px #3d7dc012}
+.parrot-star{right:8px;top:20px;color:#ffce68;font-size:26px;animation:none}
+.discovery-promise{gap:9px;margin:22px 0;color:#c4d7f2;font-size:10px;font-weight:650;letter-spacing:.9px}
+.discovery-promise i{width:3px;height:3px;background:#ffcc67}
+.journey-progress{margin:22px 0;max-width:400px}.journey-progress-copy{font-size:10px;letter-spacing:1px;color:#c4d7f2}.journey-progress-copy strong{font-size:12px;color:#fff}
+.journey-meter{height:5px;background:#ffffff25}.journey-meter span{background:#77b4ff;transition:width .3s ease}
+.learning-home-heading{align-items:center;flex-direction:row;gap:12px;margin:28px 0 12px}.learning-home-heading h2{font-size:18px;letter-spacing:-.4px;margin:0}
+.journey-onboarding{list-style:none;margin:0;padding:4px 22px;background:var(--paper);border:1px solid var(--line);border-radius:20px}
+.journey-onboarding li{display:flex;align-items:center;gap:16px;padding:21px 0}.journey-onboarding li+li{border-top:1px solid var(--line)}
+.journey-onboarding li>span{font-size:12px;font-weight:750;color:var(--accent);font-variant-numeric:tabular-nums}
+.journey-onboarding strong{font-size:14px;font-weight:650}.journey-onboarding p{margin-top:3px;font-size:13px;color:var(--muted)}
+.learning-footnote{align-items:flex-start;gap:7px;margin:24px auto 0;font-size:11px;line-height:1.6;max-width:none}.learning-footnote svg{width:15px;height:15px;margin-top:1px}
+.path-page-heading{margin-bottom:24px}.path-page-heading h1{font-size:36px;line-height:1.15;letter-spacing:-1.2px}.path-page-heading p{margin-top:12px;max-width:520px;font-size:15px}
+.path-continue{display:flex;justify-content:space-between;align-items:center;gap:18px;margin:0 0 24px;padding:18px 20px;border:1px solid var(--line);border-radius:18px;background:var(--paper)}
+.path-continue>span{font-size:13px;color:var(--muted)}.path-continue .btn{flex:none}
+
+/* Native details keep the full path compact and keyboard accessible. */
+.learning-map{gap:12px}.map-level{padding:0;border:1px solid var(--line);border-radius:18px;background:var(--paper);overflow:hidden;box-shadow:none;animation:none}
+.map-level.is-open{border-color:var(--line);box-shadow:none}.map-level[open].is-open{border-color:#b8ccef;box-shadow:0 4px 20px #143a6c06}
+.map-level-head{display:flex;align-items:center;gap:12px;min-height:88px;padding:20px;cursor:pointer;list-style:none}
+.map-level-head::-webkit-details-marker{display:none}.map-level-head:focus-visible{outline-offset:-4px;border-radius:18px}
+.map-level-mark{width:43px;height:43px;background:var(--soft);border-radius:13px;font-size:14px}
+.map-level-mark svg{width:19px;height:19px}.map-level-heading{min-width:0;display:grid;gap:3px}
+.map-level-heading .eyebrow{color:var(--muted);font-size:9px;letter-spacing:.8px}.map-level-heading strong{font-size:15px;line-height:1.4;letter-spacing:-.25px}
+.map-level-status{margin-left:auto;font-size:11px;white-space:nowrap;text-transform:none;letter-spacing:0}
+.map-chevron{color:var(--muted);display:grid;place-items:center;flex:none}.map-chevron svg{width:16px;height:16px;transform:rotate(90deg);transition:transform .18s}.map-level[open] .map-chevron svg{transform:rotate(-90deg)}
+.map-level-focus{padding:0 20px 15px;margin:0;font-size:13px}.map-units{padding:0 20px 16px;margin:0;gap:4px}.map-units:before{display:none}
+.map-unit{grid-template-columns:30px minmax(0,1fr);column-gap:12px;padding:14px 10px;min-height:0}
+.map-unit:before{position:absolute;left:24px;top:44px;bottom:-18px;width:1px;background:var(--line);content:""}.map-unit:last-child:before{display:none}
+.map-unit-node{align-self:start;position:relative;z-index:1;width:30px;height:30px;border-width:1px;font-size:11px}
+.map-unit-copy{gap:4px}.map-unit-copy strong{font-size:14px;line-height:1.4;font-weight:650}.map-unit-copy>span{font-size:12px;line-height:1.5}
+.map-unit-status{grid-column:2;margin-top:7px;text-align:left;font-size:10px;letter-spacing:.5px}
+.map-unit.is-current{background:var(--soft);padding:14px 10px;margin:0}.map-unit.is-current .map-unit-node{background:var(--accent);border-color:var(--accent);box-shadow:none;animation:none}
+.map-unit.is-done .map-unit-node{background:var(--green-bg);border-color:transparent;color:var(--green)}.map-unit.is-assessed .map-unit-status{font-size:10px}.map-unit.is-assessed .map-unit-status:after{display:none}.map-unit.is-locked .map-unit-copy strong{color:var(--muted)}
+
+/* Focus mode removes navigation from both layout and keyboard order. */
+body.activity-focus{background:var(--paper)}
+.activity-focus .sidebar,.activity-focus .topbar{display:none!important}
+.activity-focus .shell{max-width:none}.activity-focus .main{margin:0;min-height:100svh}.activity-focus .content{max-width:none;margin:0;padding:0}
+.activity-focus #app.screen-enter{animation:none;transform:none}
+.exercise-wrap{max-width:760px;margin:0 auto;min-height:100svh;padding:0 24px calc(var(--activity-actions-height) + 28px)}
+.focus-header{position:sticky;top:0;z-index:25;display:flex;align-items:center;gap:18px;padding:calc(16px + env(safe-area-inset-top,0px)) 0 16px;background:var(--paper);border-bottom:1px solid var(--line)}
+.focus-exit{border:0;background:var(--bg);color:var(--muted);flex:none}.focus-exit svg{width:20px;height:20px}
+.focus-progress{min-width:0;flex:1}.focus-progress-label{display:flex;justify-content:space-between;gap:12px;margin-bottom:10px;color:var(--muted);font-size:12px;font-weight:550}
+.focus-progress-label>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.focus-progress-label>span:last-child{flex:none;font-size:11px;font-variant-numeric:tabular-nums}
+.focus-meter{height:6px;overflow:hidden;border-radius:20px;background:var(--line)}.focus-meter>span{display:block;height:100%;background:var(--accent);border-radius:inherit;transition:width .25s ease}
+.exercise-focus .question-card{border:0;box-shadow:none;background:transparent;border-radius:0;padding:32px 0 0;margin:0;overflow:visible}
+.focus-activity-label{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--muted);font-size:12px;font-weight:600;margin-bottom:12px}
+.focus-activity-label>span:first-child{display:flex;align-items:center;gap:8px}.focus-activity-label svg{width:17px;height:17px;color:var(--accent)}.focus-activity-label>span:last-child{border-radius:7px;background:var(--soft);color:var(--accent);padding:4px 8px;font-size:10px;font-weight:750}
+.game-stage #activity-title{font-size:30px;letter-spacing:-1px;line-height:1.2;margin:0 0 24px;outline:0}
+.focus-stage{font-size:16px;overflow-wrap:anywhere}.focus-stage .scene-label{font-size:14px;line-height:1.65;margin-bottom:18px}
+.focus-stage .game-question{font-size:21px!important;line-height:1.45!important;letter-spacing:-.4px!important;margin:22px 0 16px!important}
+.focus-stage .question-label{font-size:13px;font-weight:550;margin:20px 0 9px}
+.focus-stage .question-input{font-size:17px;line-height:1.6;min-height:116px;border:1.5px solid var(--line);border-radius:15px;padding:16px;background:var(--bg);resize:vertical;scroll-margin-top:110px;scroll-margin-bottom:calc(var(--activity-actions-height) + 24px)}
+.focus-stage .question-input:focus{border-color:var(--accent);outline:3px solid var(--soft);outline-offset:1px;background:var(--paper)}.focus-stage .question-input:disabled{opacity:1;color:var(--muted);-webkit-text-fill-color:var(--muted)}
+.focus-stage .chat-shell{border-radius:16px;margin:18px 0}.focus-stage .chat-header{padding:13px 16px}.focus-stage .chat-companion{display:none}
+.focus-stage .chat-body{padding:18px;gap:12px}.focus-stage .bubble{font-size:16px;line-height:1.6;max-width:95%;padding:12px 15px}.focus-stage .character{border-radius:50%;width:34px;height:34px}.focus-stage .chat-header small{font-size:11px}
+.focus-stage .artifact,.focus-stage .paper-doc{border-radius:16px;margin:18px 0}.focus-stage .artifact-head{font-size:11px;letter-spacing:.6px;padding:14px 18px}.focus-stage .artifact-body{font-size:16px;line-height:1.8;padding:20px}
+.focus-stage .paper-doc{padding:20px}.focus-stage .red-copy{font-size:18px;line-height:2.4}.focus-stage .red-token{min-height:44px;padding:5px 3px}.focus-stage .red-editor{border:0;padding:0}
+.focus-stage .context{margin:18px 0;padding:16px 20px;background:var(--bg);border-left:3px solid #aac5f5;font-size:18px;border-radius:0 12px 12px 0}
+.focus-stage .tone-context{margin:18px 0;grid-template-columns:1fr 24px 1fr}.focus-stage .tone-tag{font-size:10px;letter-spacing:.5px;padding:13px 10px}
+.focus-stage .options{gap:10px;margin:20px 0}.focus-stage .option{padding:15px;font-size:15px;line-height:1.55;min-height:58px;border-radius:14px;align-items:flex-start}.focus-stage .option:hover:not(:disabled){border-color:var(--accent);background:var(--soft)}
+.focus-stage .option:disabled{opacity:.65}.focus-stage .option-key{flex:none;min-width:26px;height:26px;margin-top:0;font-size:11px;background:var(--bg)}
+.focus-stage .surgery-line{gap:7px;line-height:1.8;border-radius:16px;padding:18px;font-size:17px}.focus-stage .slot{min-width:44px;min-height:46px;padding:8px;border-radius:9px}.focus-stage .surgery-word{font-size:19px;border-radius:12px;padding:10px 24px}
+.focus-lesson{margin-top:26px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}.focus-lesson summary{display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none;min-height:52px;font-size:12px;font-weight:600}
+.focus-lesson summary::-webkit-details-marker{display:none}.focus-lesson summary svg{width:16px;height:16px}.focus-lesson summary span{margin-left:auto;font-size:18px}.focus-lesson[open] summary span{transform:rotate(45deg)}.focus-lesson p{margin:0 0 12px}.focus-lesson p[lang=en]{color:var(--ink)}
+.focus-feedback{scroll-margin-top:110px;scroll-margin-bottom:calc(var(--activity-actions-height) + 24px);outline:0}.focus-feedback .feedback{padding:18px;border-radius:16px;margin-top:24px}.focus-feedback .feedback p{font-size:14px}.focus-feedback .feedback .answer{font-size:17px}.focus-feedback .feedback-title{font-size:14px}
+.focus-actions{position:fixed;z-index:30;bottom:var(--keyboard-offset);left:0;right:0;background:var(--paper);border-top:1px solid var(--line);padding:14px 24px calc(14px + env(safe-area-inset-bottom,0px));box-shadow:0 -5px 24px #16243c04}
+.focus-actions-inner{max-width:712px;margin:auto;display:flex;align-items:center;gap:14px}.focus-actions .btn{min-height:54px}.focus-actions #primary-action{flex:1}.focus-actions .btn.ghost{min-width:64px;padding:12px 8px}.focus-actions .btn.correct{background:var(--green);color:#fff}
+.focus-action-hint{flex:1;text-align:right;font-size:12px;line-height:1.5;color:var(--muted)}.keyboard-open .focus-actions{padding-bottom:12px}.keyboard-open .focus-header{position:relative}
+.exercise-focus .toast{bottom:calc(var(--activity-actions-height) + 14px)}.storage-warning{position:relative;z-index:40;font-size:13px}.storage-warning button{min-height:44px}
+
+/* Checkpoints and results use the same focused surface. */
+.focus-checkpoint{padding-bottom:32px}.level-reveal,.learning-result{max-width:620px;margin:32px auto;padding:32px 24px;text-align:center;background:var(--paper);border:0;box-shadow:none;overflow-wrap:anywhere;animation:none}
+.learning-result:before{display:none}.level-reveal-art,.result-mascot{width:100px;height:100px;margin:0 auto 20px;border-radius:50%;background:var(--soft);position:relative}
+.level-reveal-art img,.result-mascot img{position:relative;inset:auto;z-index:1;width:100%;height:100%;object-fit:contain;animation:none}.reveal-ring{inset:-8px;border:1px solid var(--line);box-shadow:none;animation:none}
+.level-reveal h1,.learning-result h1{font-size:34px;line-height:1.15;letter-spacing:-1.2px;margin:12px auto 16px}.level-reveal>p,.result-description{color:var(--muted);font-size:15px;max-width:460px;margin:0 auto;line-height:1.7}
+.reveal-evidence{gap:10px;margin:24px 0;font-size:13px}.evidence-dot{width:10px;height:10px}.evidence-dot.is-correct,.evidence-dot.needs-practice{box-shadow:none}
+.assessment-levels,.result-level-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;max-width:420px;margin:24px auto}
+.assessment-level{min-height:36px;border-radius:10px;font-size:12px;font-weight:650}.assessment-level.current{box-shadow:none;transform:none}.assessment-level.passed{border-color:transparent}
+.level-reveal .btn,.learning-result .linear-cta{width:100%;max-width:440px;min-width:0;min-height:54px;box-shadow:none}.level-reveal>.tiny{font-size:12px;margin-top:16px}
+.level-result-orbit{width:140px;height:140px;margin:30px auto;border:1px solid #bed1f1;background:var(--soft);box-shadow:0 0 0 10px #215ed607;animation:none}
+.level-result-orbit strong{font-size:44px}.level-result-orbit>span:last-child{font-size:9px;color:var(--muted)}
+.unit-result{padding:18px;border-radius:16px;margin:24px 0}.unit-result-number{width:40px;height:40px;border-radius:12px;background:var(--soft);color:var(--accent)}.unit-result>div strong{font-size:14px}.unit-result>div span{font-size:12px}.unit-result-xp{font-size:12px;color:var(--green)}
+.mascot-message{padding:16px;background:var(--bg);border-radius:14px;margin:20px 0 24px}.mascot-message-mark{background:none;color:#b07b22;font-size:20px}.mascot-message p{font-size:13px;color:var(--muted);font-weight:400}
+.result-note{font-size:12px!important;margin:16px auto 0!important}.result-top{max-width:680px;margin:auto;padding:calc(16px + env(safe-area-inset-top,0px)) 24px 0}.result-top .text-btn{color:var(--muted)}
+.linear-settings{max-width:720px}.linear-settings .card{padding:26px;border-radius:20px;box-shadow:none}.linear-settings h2{font-size:18px}.linear-settings p{font-size:14px;line-height:1.7}.linear-settings .code{font-size:14px;padding:14px;border-radius:12px;min-height:140px}.linear-settings .question-label{font-size:13px}
+
+@media(min-width:1440px){.sidebar{left:calc((100vw - 1440px)/2)}}
+@media(max-width:1050px) and (min-width:821px){.sidebar{width:190px;padding:28px 14px}.main{margin-left:190px}.content{padding:24px}.topbar{padding:0 24px}.linear-hero{padding:28px}.linear-hero-copy{max-width:calc(100% - 140px)}.linear-hero-art{right:0;top:70px;width:170px;height:210px}.parrot-sun{width:130px;height:130px}.linear-hero-copy h1{font-size:32px}}
+@media(max-width:820px){
+ .shell{max-width:none}.main{margin-left:0}
+ .sidebar{position:fixed;z-index:35;left:0;right:0;top:auto;bottom:0;width:100%;height:auto;padding:6px 12px calc(6px + env(safe-area-inset-bottom,0px));border:0;border-top:1px solid var(--line);background:var(--paper)}
+ .sidebar .brand,.sidebar .tagline,.sidebar-bottom{display:none}.nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;max-width:560px;margin:auto;width:100%;height:auto}
+ .nav button{display:flex;flex-direction:column;justify-content:center;gap:5px;min-height:54px;padding:8px 6px;font-size:11px;border-radius:13px;text-align:center}.nav button.active{box-shadow:none;background:var(--soft)}.nav button svg{width:21px;height:21px}.nav button span{display:block}
+ .topbar{height:auto;min-height:76px;padding:calc(16px + env(safe-area-inset-top,0px)) 20px 14px}.breadcrumb{display:none}.mobile-brand{display:flex;font-size:25px;gap:8px}.brand-mark{width:31px;height:31px;border-radius:10px}.top-stats{gap:10px}.stat-inline{padding:7px 10px;font-size:11px}
+ .content{max-width:640px;padding:14px 20px calc(104px + env(safe-area-inset-bottom,0px))}.toast{bottom:calc(86px + env(safe-area-inset-bottom,0px))}
+ .home-intro{margin:6px 0 20px}.home-intro h2{font-size:21px}.home-intro .eyebrow{font-size:9px}
+ .linear-hero{padding:26px;border-radius:22px}.linear-hero-copy{max-width:100%}.linear-hero-copy h1{font-size:32px;line-height:1.15;max-width:100%;padding-right:100px;min-height:112px;margin-bottom:16px}
+ .linear-hero-copy>p{font-size:14px;max-width:none}.linear-hero-art{top:52px;right:6px;bottom:auto;width:125px;height:158px}.parrot-sun{width:94px;height:94px;top:20px;right:9px;box-shadow:0 0 0 12px #3d7dc012}.parrot-star{top:6px;right:10px;font-size:20px}
+ .linear-hero .linear-cta{width:100%;min-height:54px}.linear-reassurance{text-align:center;font-size:11px!important}.journey-progress{max-width:none;margin:22px 0}.discovery-promise{margin:20px 0}
+ .learning-home-heading{margin:24px 0 10px}.learning-home-heading h2{font-size:17px}.journey-onboarding{padding:0 18px}.journey-onboarding li{gap:14px;padding:20px 0}
+ .path-page-heading h1{font-size:30px}.path-page-heading p{font-size:14px}.path-continue{padding:16px;gap:14px}.path-continue .btn{padding:12px 16px;font-size:13px}
+ .map-level-head{padding:18px 16px;gap:10px}.map-level-heading strong{font-size:14px}.map-level-status{font-size:10px}.map-level-mark{width:39px;height:39px}.map-level-focus{padding:0 16px 14px;font-size:12px}.map-units{padding:0 10px 12px}.map-unit{padding:13px 10px}.map-unit-copy strong{font-size:14px}
+ .exercise-wrap{padding:0 20px calc(var(--activity-actions-height) + 24px)}.focus-header{gap:14px;padding:calc(12px + env(safe-area-inset-top,0px)) 0 14px}.focus-progress-label{font-size:11px;gap:8px}.focus-progress-label>span:last-child{font-size:10px}.focus-exit{min-width:44px;min-height:44px}
+ .exercise-focus .question-card{padding-top:24px}.game-stage #activity-title{font-size:27px;letter-spacing:-.8px;margin-bottom:20px}.focus-stage .game-question{font-size:20px!important}.focus-stage .question-input{font-size:16px;min-height:112px}
+ .focus-stage .chat-body{padding:15px}.focus-stage .bubble{padding:12px;font-size:15px}.focus-stage .artifact-body{padding:18px;font-size:15px}.focus-stage .scene-label{font-size:13px}.focus-stage .paper-doc{padding:16px}.focus-stage .red-copy{font-size:17px}.focus-stage .surgery-line{padding:14px;font-size:16px}.focus-stage .slot{min-width:44px}
+ .focus-actions{padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px))}.focus-actions-inner{gap:12px}.focus-actions .btn{min-height:52px;font-size:15px}.focus-actions .btn.ghost{font-size:13px;min-width:58px}.focus-feedback .feedback{padding:16px}.focus-feedback .feedback p{font-size:14px}.focus-feedback .feedback .answer{font-size:16px}
+ .focus-checkpoint{padding-bottom:24px}.level-reveal,.learning-result{margin:20px auto;padding:24px 0}.learning-result{padding:20px 24px calc(28px + env(safe-area-inset-bottom,0px))}.level-reveal h1,.learning-result h1{font-size:30px}.level-reveal>p,.result-description{font-size:14px}.level-reveal-art,.result-mascot{width:88px;height:88px}
+ .level-result-orbit{width:126px;height:126px}.unit-result{padding:14px;gap:10px;flex-wrap:wrap}.unit-result>div{flex:1}.unit-result-xp{font-size:11px}.assessment-levels,.result-level-row{gap:5px}.assessment-level{font-size:11px}
+ .linear-settings .card{padding:20px}.linear-settings .button-row{display:grid;grid-template-columns:1fr 1fr}.linear-settings .button-row .btn{padding:12px 8px;font-size:13px}.linear-settings .code{font-size:16px}.linear-settings .card>.btn{width:100%}
+}
+@media(max-width:360px){.content{padding-left:16px;padding-right:16px}.linear-hero{padding:22px}.linear-hero-copy h1{font-size:28px;padding-right:72px;min-height:106px}.linear-hero-art{width:104px;height:140px;right:-2px;top:58px}.parrot-sun{width:78px;height:78px}.home-intro h2{font-size:19px}.map-level-status{display:none}.path-continue{align-items:stretch;flex-direction:column}.exercise-wrap{padding-left:16px;padding-right:16px}.focus-actions{padding-left:16px;padding-right:16px}.focus-progress-label>span:first-child{max-width:155px}.focus-stage .option{padding:13px;font-size:14px}}
+@media(prefers-color-scheme:dark){
+ :root{--bg:#101925;--paper:#172230;--ink:#e8eff8;--muted:#a4b3c7;--line:#2b3b4f;--accent:#85b1ff;--accent-dark:#a4c5ff;--soft:#233753;--green:#79cba6;--green-bg:#1b382e;--red:#f2a0ae;--red-bg:#3e2630;--shadow:none}
+ .btn{background:#326fe1;color:#fff}.btn:hover{background:#407eea}.btn.secondary{background:var(--paper);color:var(--ink)}.btn.ghost{background:transparent;color:var(--muted)}
+ .linear-hero{border-color:#294872}.map-level[open].is-open{border-color:#426289}.map-unit.is-current .map-unit-node,.assessment-level.current{background:#326fe1;color:#fff;border-color:#326fe1}.focus-actions .btn.correct{background:#237b58;color:#fff}.focus-stage .context{border-color:#456b9e}.level-result-orbit{border-color:#426289}
+}
+@media(prefers-reduced-motion:reduce){.focus-meter>span,.journey-meter span,.map-chevron svg{transition:none}.btn:active{transform:none}}
 
 </style>
 </head>
@@ -988,7 +1138,7 @@ function pickStory(index){const a=state.active,g=currentGame(),m=a.mini;if(a.fee
 function chooseRed(partIndex){const a=state.active,g=currentGame(),m=a.mini;if(a.feedback||m.feedback)return;const part=redTokens(g)[partIndex];if(part.error===undefined){const q=g.items.find(q=>!m.results.some(r=>r.key===q.key))||g.items[0];record(q,false,`Trecho já correto marcado: ${part.text}`,{extra:true});m.feedback.answer=part.text;m.feedback.why=LEVELS.indexOf(g.level)<3?'Este trecho já estava correto. Procure os erros nas formas verbais ou nas expressões do texto.':'This span is already correct. Check the remaining verb forms and fixed expressions.';}else if(!m.results.some(x=>x.key===g.items[part.error].key)){m.target=part.error;m.draft='';}save();renderExercise();}
 function redTokens(g){return g.parts.flatMap(p=>p.error!==undefined?[p]:p.text.split(/(\s+)/).filter(Boolean).map(text=>({text,space:/^\s+$/.test(text)})));}
 function feedbackBlock(f){if(!f)return '';return `<div class="feedback round-feedback ${f.correct?'':'wrong'}" role="status"><div class="feedback-title">${icon(f.correct?'check':'refresh',f.correct?'check-draw':'')}${f.correct?'É isso.':'Um ajuste aqui.'}${f.xp?`<span style="margin-left:auto">+${f.xp} XP</span>`:''}</div><p class="answer" lang="en">${esc(f.answer)}</p><p>${esc(f.why)}</p></div>`;}
-function answerBox(label='Sua resposta em inglês'){const m=state.active.mini;return `<label class="question-label" for="answer">${label}</label><textarea class="question-input" id="answer" rows="2" lang="en" spellcheck="false" autocomplete="off" maxlength="2000" placeholder="Escreva aqui…" ${m.feedback||state.active.feedback?'disabled':''}>${esc(m.draft)}</textarea>`;}
+function answerBox(label='Sua resposta em inglês'){const m=state.active.mini;return `<label class="question-label" for="answer">${label}</label><textarea class="question-input" id="answer" rows="2" lang="en" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="none" enterkeyhint="done" maxlength="2000" placeholder="Escreva aqui…" ${m.feedback||state.active.feedback?'disabled':''}>${esc(m.draft)}</textarea>`;}
 function chatHeader(person){const c=CAST[person]||CAST.mia;return `<div class="chat-header"><div class="character" style="--cast:${c.color}">${c.initials}</div><div><strong>${c.name}</strong><small>${c.role}</small></div><span class="chat-companion"><img src="assets/papagaio-azul.png" alt="Papagaio Azul, seu parceiro de conversa"><span>seu parceiro</span></span><span class="dot" aria-hidden="true"></span></div>`;}
 function reaction(g,correct,q){return correct?CAST[g.person||'mia'].good:(q?.bad||CAST[g.person||'mia'].bad);}
 function stageHTML(g){const reference=g.reference?`<aside class="artifact"><div class="artifact-head">${icon('book')}${esc(g.reference.title)}</div><div class="artifact-body ticket" lang="en">${esc(g.reference.text)}</div></aside>`:'';return reference+stageBodyHTML(g);}
@@ -1269,7 +1419,9 @@ const LINEAR_LEVEL_COPY=[
 const previousLinearHeader=header;
 header=function(){
  previousLinearHeader();
- const nav=[['home','home','Minha trilha'],['path','map','Percurso completo'],['settings','settings','Preferências']];
+ document.body.classList.toggle('activity-focus',view==='exercise'||view==='summary');
+ document.body.classList.toggle('exercise-focus',view==='exercise');
+ const nav=[['home','home','Início'],['path','map','Trilha'],['settings','settings','Ajustes']];
  $('#nav').innerHTML=nav.map(([viewId,iconId,label])=>`<button data-nav="${viewId}" class="${view===viewId?'active':''}" ${view===viewId?'aria-current="page"':''}>${icon(iconId)}<span>${label}</span></button>`).join('');
  $('#crumb').textContent='/ '+(nav.find(item=>item[0]===view)?.[2]||'Aprendizado');
 };
@@ -1277,7 +1429,9 @@ header=function(){
 const previousLinearNavigate=navigate;
 navigate=function(destination){
  if(['arcade','daily','review'].includes(destination))destination='path';
- return previousLinearNavigate(destination);
+ const result=previousLinearNavigate(destination);
+ if(destination!=='exercise'){activityActionObserver?.disconnect();syncActivityKeyboard();}
+ return result;
 };
 
 mastered=function(ui){return (state.passes[ui]||0)>=1;};
@@ -1345,61 +1499,88 @@ advance=function(){
  return previousLinearAdvance();
 };
 
-const previousLinearRenderExercise=renderExercise;
+function focusHeaderHTML(active){
+ const placement=active.mode==='placement',completed=active.i+(active.feedback?1:0),total=placement?18:active.ids.length;
+ const label=placement?'Descobrindo seu nível':UNITS[active.unit].title;
+ return `<header class="focus-header"><button class="focus-exit icon-btn" data-action="pause" aria-label="Salvar e sair da atividade" title="Salvar e sair">${icon('close')}</button><div class="focus-progress"><div class="focus-progress-label"><span>${esc(label)}</span><span>${placement?`${LEVELS[active.level]} · ${active.i%3+1} de 3`:`${active.i+1} de ${total}`}</span></div><div class="focus-meter" role="progressbar" aria-label="${placement?'Progresso da descoberta, até 18 atividades':'Progresso da unidade'}" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${completed}"><span style="width:${completed/total*100}%"></span></div></div></header>`;
+}
 function assessmentCheckpoint(){
  const active=state.active,level=active.level,results=active.answers.slice(-3),correct=results.filter(answer=>answer.ratio>=.7).length;
  return `<section class="level-reveal" aria-live="polite"><div class="level-reveal-art"><span class="reveal-ring"></span><img src="assets/papagaio-azul.png" alt="Papagaio Azul comemorando seu progresso"></div><div class="eyebrow">SINAL DE PROGRESSO · ${LEVELS[level]}</div><h1>${correct===3?'Que salto!':correct===2?'Temos uma pista.':'Cada resposta ajudou a ajustar o próximo passo.'}</h1><p>Você concluiu esta etapa de leitura e escrita. Vamos conferir como se sente no próximo nível.</p><div class="reveal-evidence" aria-label="Resultado das três atividades">${results.map((answer,index)=>`<span class="evidence-dot ${answer.ratio>=.7?'is-correct':'needs-practice'}" title="Atividade ${index+1}: ${Math.round(answer.ratio*100)}%"></span>`).join('')}<strong>${correct}/3</strong></div><div class="assessment-levels">${LEVELS.map((name,index)=>`<span class="assessment-level ${index<level?'passed':index===level?'current':''}">${name}</span>`).join('')}</div><button class="btn" id="assessment-continue" data-action="advance">Continuar descoberta ${icon('arrow')}</button><p class="tiny muted">Sem cronômetro. Você pode parar e retomar quando quiser.</p></section>`;
 }
 renderExercise=function(){
- previousLinearRenderExercise();
- const active=state.active;if(!active)return;
- if(active.mode==='placement'){
-  if(active.mini.checkpoint){$('#app').innerHTML=assessmentCheckpoint();$('#assessment-continue')?.focus({preventScroll:true});return;}
-  const step=active.i+1,bandStep=active.i%3+1,level=LEVELS[active.level];
-  const strip=`<div class="assessment-strip"><div class="assessment-strip-top"><span class="eyebrow">DESCOBERTA DO SEU NÍVEL</span><span class="assessment-counter">${String(step).padStart(2,'0')} <span>/ até 18</span></span></div><div class="assessment-band">${LEVELS.map((name,index)=>`<span class="assessment-level ${index<active.level?'passed':index===active.level?'current':''}">${name}</span>`).join('')}</div><div class="assessment-note"><span class="assessment-pulse"></span><span>Investigando <strong>${level}</strong> · etapa ${bandStep} de 3 · ${LINEAR_LEVEL_COPY[active.level]}</span></div></div>`;
-  const section=$('#question-card');
-  if(section?.insertAdjacentHTML)section.insertAdjacentHTML('beforebegin',strip);
-  else $('#app').innerHTML=$('#app').innerHTML.replace('<section class="question-card game-stage"',strip+'<section class="question-card game-stage"');
-  return;
+ const active=state.active;if(!active){navigate('home');return;}
+ header();
+ if(active.mode==='placement'&&active.mini.checkpoint){
+  $('#app').innerHTML=`<div class="exercise-wrap focus-checkpoint">${focusHeaderHTML(active)}${assessmentCheckpoint()}</div>`;
+  $('#assessment-continue')?.focus({preventScroll:true});observeActivityActions();return;
  }
- if(active.mode==='session'){
-  const completed=UNITS.filter(unit=>mastered(unit.id)).length-(state.placement||0)*3;
-  const pathStrip=`<div class="linear-session-strip"><div><span class="eyebrow">${LEVELS[active.level]} · UNIDADE ${(active.unit%3)+1} DE 3</span><strong>${esc(UNITS[active.unit].title)}</strong></div><span>${Math.max(0,completed)} / ${18-(state.placement||0)*3} unidades</span></div>`;
-  const section=$('#question-card');if(section?.insertAdjacentHTML)section.insertAdjacentHTML('beforebegin',pathStrip);
- }
+ const game=currentGame(),mini=active.mini,type=GAME_TYPES[game.type],feedback=mini.feedback;
+ const answered=Boolean(active.feedback||feedback),canSubmit=['chat','tone','trap','reading','surgery'].includes(game.type)||(game.type==='redpen'&&mini.target!==null);
+ const focused=document.activeElement,slotFocus=focused?.dataset?.slot;
+ const helper=game.type==='story'?'Escolha uma resposta para continuar.':game.type==='redpen'?'Toque no trecho que precisa de correção.':'Escolha onde a palavra se encaixa.';
+ const lesson=active.mode==='session'&&active.i===0?`<details class="focus-lesson"><summary>${icon('book')}Uma dica para esta unidade <span>+</span></summary><p>${esc(UNITS[active.unit].lesson)}</p><p lang="en">${esc(UNITS[active.unit].example)}</p></details>`:'';
+ const action=answered?`<button class="btn ${(active.feedback?.correct??feedback?.correct)?'correct':''}" data-action="advance" id="primary-action">${active.feedback&&active.i===active.ids.length-1&&active.mode!=='placement'?'Ver resultado':'Continuar'}${icon('arrow')}</button>`:canSubmit?'<button class="btn" data-action="submit" id="primary-action" disabled>Verificar resposta</button>':`<span class="focus-action-hint">${helper}</span>`;
+ $('#app').innerHTML=`<div class="exercise-wrap">${focusHeaderHTML(active)}<section class="question-card game-stage" id="question-card"><div class="focus-activity-label"><span>${icon(type[1])}${type[0]}</span><span>${game.level}</span></div><h1 id="activity-title" tabindex="-1">${esc(game.title)}</h1><div class="focus-stage">${stageHTML(game)}</div>${feedback?`<div class="focus-feedback" tabindex="-1">${feedbackBlock(feedback)}</div>`:''}${lesson}</section><footer class="focus-actions ${answered?'has-feedback':''}"><div class="focus-actions-inner">${answered?'':`<button class="btn ghost" data-action="skip">Pular</button>`}${action}</div></footer></div>`;
+ updateSubmit();observeActivityActions();
+ if(answered){$('#primary-action')?.focus({preventScroll:true});requestAnimationFrame(()=>{if(view==='exercise'&&state.active===active&&state.active.mini===mini)$('.focus-feedback')?.scrollIntoView({block:'nearest',behavior:'instant'});});}
+ else if(slotFocus!==undefined&&/^\d+$/.test(slotFocus))$(`[data-slot="${slotFocus}"]`)?.focus({preventScroll:true});
+ else if(game.type==='redpen'&&mini.target!==null&&focused?.dataset?.red!==undefined)$('#answer')?.focus();
+ else $('#activity-title')?.focus({preventScroll:true});
 };
 
-function learningMapHTML(){
+// Reserve the actual action-bar height so large text never covers an answer.
+let activityActionObserver;
+function observeActivityActions(){
+ activityActionObserver?.disconnect();
+ const actions=$('.focus-actions');
+ const measure=()=>document.documentElement.style.setProperty('--activity-actions-height',`${actions?.getBoundingClientRect().height||0}px`);
+ measure();
+ if(actions&&typeof ResizeObserver!=='undefined'){activityActionObserver=new ResizeObserver(measure);activityActionObserver.observe(actions);}
+}
+function syncActivityKeyboard(){
+ const viewport=window.visualViewport,typing=view==='exercise'&&document.activeElement?.matches?.('input,textarea');
+ const offset=viewport&&typing?Math.max(0,window.innerHeight-viewport.height-viewport.offsetTop):0;
+ document.documentElement.style.setProperty('--keyboard-offset',`${Math.round(offset)}px`);
+ document.body.classList.toggle('keyboard-open',Boolean(typing&&offset>80));
+}
+window.visualViewport?.addEventListener('resize',syncActivityKeyboard);
+window.visualViewport?.addEventListener('scroll',syncActivityKeyboard);
+document.addEventListener('focusin',syncActivityKeyboard);
+document.addEventListener('focusout',()=>requestAnimationFrame(syncActivityKeyboard));
+
+function learningMapHTML(compact=false){
  const task=nextTask(),startUnit=state.placement===null?0:state.placement*3;
  return `<section class="learning-map" aria-label="Percurso linear do A1 ao C2">${LEVELS.map((level,li)=>{
+  if(compact&&li!==task.level)return '';
   const units=UNITS.slice(li*3,li*3+3),available=state.placement!==null&&units.some(unit=>unitUnlocked(unit.id)),levelDone=units.every(unit=>mastered(unit.id));
-  return `<section class="map-level ${available?'is-open':''} ${levelDone?'is-done':''}"><div class="map-level-head"><span class="map-level-mark">${levelDone?icon('check'):String(li+1).padStart(2,'0')}</span><div><span class="eyebrow">NÍVEL ${level}</span><h2>${LEVEL_NAMES[li]}</h2></div><span class="map-level-status">${state.placement===null?'a descobrir':levelDone?'concluído':available?'em andamento':'a seguir'}</span></div><p class="map-level-focus">${LINEAR_LEVEL_COPY[li]}</p><div class="map-units">${units.map((unit,index)=>{
-   const below=state.placement!==null&&unit.id<startUnit,done=mastered(unit.id)&&!below,current=state.placement!==null&&task.unit===unit.id&&!state.active,locked=state.placement===null||(!below&&!done&&!current&&unit.id>task.unit);
-   const status=below?'abaixo do ponto de entrada':done?'concluída':current?'próxima etapa':'bloqueada';
+  return `<details class="map-level ${available?'is-open':''} ${levelDone?'is-done':''}" ${compact||li===task.level?'open':''}><summary class="map-level-head"><span class="map-level-mark">${levelDone?icon('check'):level}</span><span class="map-level-heading"><span class="eyebrow">NÍVEL ${level}</span><strong>${LEVEL_NAMES[li]}</strong></span><span class="map-level-status">${state.placement===null?'a descobrir':levelDone?'concluído':li===task.level?'atual':'a seguir'}</span><span class="map-chevron">${icon('arrow')}</span></summary><p class="map-level-focus">${LINEAR_LEVEL_COPY[li]}</p><div class="map-units">${units.map((unit,index)=>{
+   const below=state.placement!==null&&unit.id<startUnit,done=mastered(unit.id)&&!below,current=state.placement!==null&&task.unit===unit.id&&!done,locked=state.placement===null||(!below&&!done&&!current&&unit.id>task.unit);
+   const status=below?'avaliada':done?'concluída':current?(state.active?'em andamento':'próxima etapa'):'a seguir';
    return `<div class="map-unit ${done?'is-done':''} ${current?'is-current':''} ${locked?'is-locked':''} ${below?'is-assessed':''}"><span class="map-unit-node">${done?icon('check'):below?'↗':String(index+1).padStart(2,'0')}</span><div class="map-unit-copy"><strong>${esc(unit.title)}</strong><span>${esc(unit.canDo)}</span></div><span class="map-unit-status">${status}</span></div>`;
-  }).join('')}</div></section>`;
+  }).join('')}</div></details>`;
  }).join('')}</section>`;
 }
 
 function progressHeadline(task){
- if(task.mode==='placement')return {tag:'UMA DESCOBERTA, SEIS NÍVEIS',title:'Onde seu inglês começa?',description:'Um percurso rápido e adaptativo, feito só de leitura e escrita. Suas respostas mostram por onde seguir.'};
- if(task.mode==='resume')return state.active.mode==='placement'?{tag:'SUA DESCOBERTA ESTÁ SALVA',title:'Vamos continuar de onde paramos?',description:'O papagaio guardou seu progresso. Retome sem perder as respostas anteriores.'}:{tag:'SUA TRILHA CONTINUA',title:'Mais um passo no seu inglês.',description:UNITS[task.unit].canDo};
- if(task.mode==='complete')return {tag:'PERCURSO CONCLUÍDO',title:'Você chegou ao C2.',description:'Você percorreu todas as etapas do A1 ao C2, com prática de leitura e escrita em situações reais.'};
+ if(task.mode==='placement')return {tag:'SEU PRIMEIRO PASSO',title:'Seu inglês tem um ponto de partida.',description:'Descubra o seu com situações de leitura e escrita que se adaptam às suas respostas.'};
+ if(task.mode==='resume')return state.active.mode==='placement'?{tag:'DESCOBERTA EM ANDAMENTO',title:'Vamos de onde você parou.',description:'Suas respostas estão salvas. Continue descobrindo seu ponto de partida.'}:{tag:'SUA PRÓXIMA ETAPA',title:UNITS[task.unit].title,description:UNITS[task.unit].canDo};
+ if(task.mode==='complete')return {tag:'PERCURSO CONCLUÍDO',title:'Um caminho inteiro de conquistas.',description:'Você concluiu a trilha de leitura e escrita até o C2. Veja as etapas do seu percurso.'};
  return {tag:`${LEVELS[task.level]} · UNIDADE ${(task.unit%3)+1}`,title:UNITS[task.unit].title,description:UNITS[task.unit].canDo};
 }
 function learningHero(){
  const task=nextTask(),copy=progressHeadline(task),button=task.mode==='placement'?'Descobrir meu nível':task.mode==='resume'?'Retomar percurso':task.mode==='complete'?'Ver percurso completo':'Continuar aprendendo';
  const progress=state.placement===null?0:Math.round((UNITS.filter(unit=>mastered(unit.id)).length/18)*100);
- return `<section class="linear-hero ${task.mode==='placement'?'discovery-hero':''}"><div class="linear-hero-copy"><span class="eyebrow">${copy.tag}</span><h1>${copy.title}</h1><p>${copy.description}</p>${task.mode==='placement'?'<div class="discovery-promise"><span>LEITURA</span><i></i><span>ESCRITA</span><i></i><span>A1 → C2</span></div>':`<div class="journey-progress"><div class="journey-progress-copy"><span>SEU PERCURSO</span><strong>${progress}%</strong></div><div class="journey-meter" role="progressbar" aria-label="Progresso do percurso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}"><span style="--journey-progress:${progress}%"></span></div></div>`}<button class="btn linear-cta" data-action="next">${button} ${icon('arrow')}</button><p class="linear-reassurance">${task.mode==='placement'?'Sem áudio, sem microfone e sem cronômetro.':'Uma etapa de cada vez. Seu progresso fica salvo neste dispositivo.'}</p></div><div class="linear-hero-art" aria-hidden="true"><span class="parrot-sun"></span><img src="assets/papagaio-azul.png" alt=""><span class="parrot-speech">${task.mode==='placement'?'Oi! Vamos descobrir?':'Vamos juntos!'}</span><span class="parrot-star">✦</span></div></section>`;
+ return `<section class="linear-hero ${task.mode==='placement'?'discovery-hero':''}"><div class="linear-hero-copy"><span class="eyebrow">${copy.tag}</span><h1>${copy.title}</h1><p>${copy.description}</p>${task.mode==='placement'?'<div class="discovery-promise"><span>LEITURA</span><i></i><span>ESCRITA</span><i></i><span>A1 → C2</span></div>':`<div class="journey-progress"><div class="journey-progress-copy"><span>SEU PERCURSO</span><strong>${progress}%</strong></div><div class="journey-meter" role="progressbar" aria-label="Progresso do percurso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progress}"><span style="--journey-progress:${progress}%"></span></div></div>`}<button class="btn linear-cta" ${task.mode==='complete'?'data-nav="path"':'data-action="next"'}>${button} ${icon('arrow')}</button><p class="linear-reassurance">${task.mode==='placement'?'No seu ritmo. Só leitura e escrita.':'Seu progresso é salvo automaticamente.'}</p></div><div class="linear-hero-art" aria-hidden="true"><span class="parrot-sun"></span><img src="assets/papagaio-azul.png" alt=""><span class="parrot-star">✦</span></div></section>`;
 }
 
 renderHome=function(){
- const task=nextTask(),copy=progressHeadline(task);
- $('#app').innerHTML=`${learningHero()}<div class="learning-home-heading"><div><span class="eyebrow">A LINHA DO SEU APRENDIZADO</span><h2>${state.placement===null?'O percurso completo, em ordem.':'Sua próxima conquista está no caminho.'}</h2></div><span>${state.placement===null?'6 níveis · 18 unidades':`${LEVELS[state.placement]} a C2 · 18 unidades`}</span></div>${learningMapHTML()}<div class="learning-footnote">${icon('shield')} A avaliação indica um ponto de partida em leitura e escrita; não é uma certificação oficial de nível.</div>`;
+ const discovering=state.placement===null;
+ $('#app').innerHTML=`<div class="home-intro"><div><span class="eyebrow">SEU ESPAÇO DE APRENDIZADO</span><h2>Um passo de cada vez.</h2></div><span class="home-level-pill">${discovering?'A1 → C2':LEVELS[nextTask().level]}</span></div>${learningHero()}<div class="learning-home-heading"><h2>${discovering?'Uma trilha feita para você':'Seu capítulo atual'}</h2><button class="text-btn" data-nav="path">Ver trilha ${icon('arrow')}</button></div>${discovering?`<ol class="journey-onboarding"><li><span>01</span><div><strong>Encontre seu ponto de partida</strong><p>As perguntas se ajustam ao seu inglês.</p></div></li><li><span>02</span><div><strong>Aprenda em situações reais</strong><p>Leia, traduza, escreva e faça escolhas.</p></div></li><li><span>03</span><div><strong>Avance uma etapa por vez</strong><p>Cada unidade prepara a próxima.</p></div></li></ol>`:learningMapHTML(true)}<div class="learning-footnote">${icon('shield')}${discovering?'A avaliação estima seu ponto de entrada em leitura e escrita.':'Seu percurso fica salvo neste navegador.'}</div>`;
 };
 renderPath=function(){
  const task=nextTask();
- $('#app').innerHTML=`<div class="path-page-heading"><span class="eyebrow">SEU PERCURSO · A1 → C2</span><h1>Uma linha clara até o domínio.</h1><p>As etapas são liberadas em sequência. Cada unidade mistura leitura, escrita e situações diferentes.</p></div>${learningHero()}${learningMapHTML()}`;
+ $('#app').innerHTML=`<div class="path-page-heading"><span class="eyebrow">6 NÍVEIS · 18 UNIDADES</span><h1>Seu inglês, etapa por etapa.</h1><p>Um percurso de leitura e escrita, do seu ponto de partida até o C2.</p></div><div class="path-continue"><span>${task.mode==='placement'?'Comece descobrindo seu nível.':task.mode==='complete'?'Todas as etapas concluídas.':'Sua próxima etapa está pronta.'}</span>${task.mode==='complete'?'':`<button class="btn" data-action="next">${task.mode==='placement'?'Descobrir nível':'Continuar'}${icon('arrow')}</button>`}</div>${learningMapHTML()}`;
 };
 renderArcade=function(){renderPath();};
 renderDaily=function(){renderPath();};
@@ -1413,6 +1594,7 @@ renderSummary=function(){
  const mascotLine=placement?result.level>=4?'Você já navega por estruturas avançadas. Agora vamos lapidar precisão e nuance.':result.level>=2?'Você já consegue lidar com várias situações reais. Vamos consolidar sua próxima etapa.':'Todo começo conta. Agora você tem um ponto de partida feito para você.':result.passed?'Mais uma etapa virou conhecimento seu.': 'Errar apontou o próximo ajuste. Vamos usá-lo no caminho.';
  $('#app').innerHTML=`<section class="learning-result ${placement?'placement-result':''} ${result.passed?'result-success':'result-practice'}"><div class="result-mascot"><img src="assets/papagaio-azul.png" alt="Papagaio Azul acompanhando seu percurso"></div><span class="eyebrow">${placement?'DESCOBERTA CONCLUÍDA':result.passed?'ETAPA CONCLUÍDA':'UM PASSO DE APRENDIZADO'}</span><h1>${title}</h1><p class="result-description">${description}</p>${placement?`<div class="level-result-orbit"><span class="orbit-glow"></span><strong>${LEVELS[result.level]}</strong><span>PONTO DE PARTIDA</span></div><div class="result-level-row">${LEVELS.map((level,index)=>`<span class="assessment-level ${index<result.level?'passed':index===result.level?'current':''}">${level}</span>`).join('')}</div>`:`<div class="unit-result"><span class="unit-result-number">${String(result.unit+1).padStart(2,'0')}</span><div><strong>${esc(UNITS[result.unit].title)}</strong><span>${Math.round(result.ratio*100)}% de precisão · ${result.correct} de ${result.total} atividades</span></div><span class="unit-result-xp">+${result.xp} XP</span></div>`}<div class="mascot-message"><span class="mascot-message-mark">✦</span><p>${mascotLine}</p></div><button class="btn linear-cta" data-action="next">${placement?`Começar por ${LEVELS[result.level]}`:complete?'Ver percurso completo':result.passed?'Seguir para a próxima unidade':'Continuar nesta unidade'} ${icon('arrow')}</button><p class="result-note">${placement?'Estimativa de entrada baseada somente em leitura e escrita.':`Seu próximo passo: ${task.mode==='complete'?'fim do percurso':task.mode==='session'?`unidade ${task.unit+1} · ${LEVELS[task.level]}`:'retomar sua sessão'}.`}</p></section>`;
  if(!placement){const xp=$('.unit-result-xp');if(xp)xp.setAttribute('aria-label',`${result.xp} XP conquistados`);}
+ $('#app').insertAdjacentHTML('afterbegin',`<div class="result-top"><button class="text-btn" data-nav="home">${icon('close')}Voltar ao início</button></div>`);
 };
 
 renderSettings=function(){
@@ -1427,7 +1609,6 @@ function clearOutOfPathSession(){
  toast(usesVoice?'A atividade salva foi retomada pela trilha de leitura e escrita.':'A trilha agora segue em sequência. Seu progresso concluído foi mantido.');
 }
 
-const previousLinearStorageReady=()=>{};
 clearOutOfPathSession();
 header();renderHome();
 

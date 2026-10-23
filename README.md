@@ -2,6 +2,10 @@
 
 Trilha de inglês do A1 ao C2, com interface em português, nivelamento adaptativo e 18 unidades em sequência. As atividades trabalham leitura e escrita; não exigem fala, microfone ou áudio.
 
+A interface prioriza o celular. Início, Trilha e Ajustes ficam na navegação inferior. Durante uma atividade, o app entra em modo de foco: mantém somente a saída com salvamento, o progresso, o exercício e a ação principal. O botão de resposta acompanha a área visível ao abrir o teclado; as dicas da unidade ficam recolhidas e podem ser abertas quando necessário.
+
+`npm run test:interface` confere os sete formatos escritos, entrada e saída do modo de foco, retomada de rascunhos e checkpoints, progressão e ajuste do teclado usando um adaptador de DOM. Esse comando não verifica a aparência ou o layout em um navegador real.
+
 ## Abrir localmente
 
 Abra `index.html` no navegador. Mantenha a pasta `assets/` ao lado do arquivo para exibir as imagens e os ícones. O aplicativo não exige instalação, conta nem servidor.
@@ -37,6 +41,9 @@ src/games.js        Banco de atividades, personagens e tipos de minijogo
 src/arcade.js       Regras do Arcade, interface, áudio e migração de progresso
 src/catalog.js     Busca, filtros, paginação e retomada no catálogo
 src/catalog.css    Apresentação responsiva do catálogo
+src/linear.js      Trilha contínua, telas principais e modo de foco
+src/linear.css     Estilos da trilha e do nivelamento
+src/interface.css Interface mobile, navegação e controles das atividades
 src/storage.js     Recuperação de progresso e proteção entre abas
 assets/            Imagens e ícones locais
 build.cjs          Montagem do HTML com CSS e JavaScript incorporados
