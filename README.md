@@ -6,6 +6,10 @@ A interface prioriza o celular. Início, Trilha e Ajustes ficam na navegação i
 
 `npm run test:interface` confere os sete formatos escritos, entrada e saída do modo de foco, retomada de rascunhos e checkpoints, progressão e ajuste do teclado usando um adaptador de DOM. Esse comando não verifica a aparência ou o layout em um navegador real.
 
+As atividades oferecem instruções de uso e, nas unidades de prática, uma dica contextual opcional. **Não sei** revela somente a pergunta atual. O feedback compara a resposta enviada com uma resposta aceita; nas questões de escrita, uma correção opcional permite praticar sem alterar a nota nem gerar XP. O resultado da unidade mostra a habilidade trabalhada e até dois pontos para reforçar a partir das perguntas erradas. Rascunhos de correção também são salvos. O teste de interface cobre esses fluxos e o atalho Enter durante a correção.
+
+O escopo desta melhoria está documentado em `PROMPT-PROXIMA-MELHORIA.md`.
+
 ## Abrir localmente
 
 Abra `index.html` no navegador. Mantenha a pasta `assets/` ao lado do arquivo para exibir as imagens e os ícones. O aplicativo não exige instalação, conta nem servidor.

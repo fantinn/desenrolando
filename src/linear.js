@@ -92,6 +92,84 @@ advance=function(){
  return previousLinearAdvance();
 };
 
+const LEARNING_INSTRUCTIONS={
+ chat:'Leia a conversa e responda ao pedido em inglês. Escreva somente a resposta; não precisa repetir a pergunta.',
+ reading:'Procure a informação no texto e responda em inglês. Uma resposta curta basta.',
+ tone:'Reescreva a mensagem em inglês seguindo o tom pedido, mantendo o sentido original.',
+ trap:'Leia o contexto e escreva a expressão em inglês que transmite a ideia pedida.',
+ redpen:'Toque em um trecho com erro e escreva somente sua correção. Cada trecho é conferido separadamente.',
+ story:'Leia a situação e toque na resposta que faz mais sentido. Depois da explicação, continue a conversa.',
+ surgery:'Toque no sinal de + onde a palavra deve entrar. Você pode mudar a posição antes de verificar.'
+};
+function learningHelpHTML(game){
+ const active=state.active,mini=active.mini;
+ if(active.feedback||mini.feedback)return '';
+ const hint=active.mode==='session'&&(game.type!=='redpen'||mini.target!==null)?currentItem().rule:'';
+ return `<div class="learning-help"><details><summary>${icon('book')}Como responder</summary><p>${esc(LEARNING_INSTRUCTIONS[game.type]||'Leia o pedido e responda em inglês.')}</p><p class="help-note">“Não sei” revela somente esta pergunta e a registra para praticar depois.</p></details>${hint?`<details class="question-hint"><summary>${icon('spark')}Preciso de uma dica</summary><p>${esc(hint)}</p></details>`:''}</div>`;
+}
+function repairAvailable(){
+ const active=state.active,feedback=active?.mini.feedback;
+ return Boolean(active?.mode==='session'&&feedback&&!feedback.correct&&!feedback.extra&&['chat','reading','tone','trap','redpen'].includes(currentGame().type));
+}
+function repairHTML(){
+ if(!repairAvailable())return '';
+ const repair=state.active.mini.repair;
+ if(!repair?.open)return '<button class="text-btn repair-open" data-learning="repair-open">Quero corrigir minha resposta</button>';
+ if(repair.correct)return '<div class="repair-success" role="status">Agora sim. Use essa estrutura na próxima pergunta.<small>A correção foi uma prática; a nota original foi mantida.</small></div>';
+ return `<div class="repair-box"><label class="question-label" for="repair-answer">Reescreva sua resposta</label><p class="repair-note">Use a explicação acima. Esta prática não altera sua nota nem gera XP.</p><textarea id="repair-answer" class="question-input" rows="2" lang="en" spellcheck="false" autocomplete="off" autocapitalize="none" autocorrect="off" enterkeyhint="done" maxlength="2000" placeholder="Tente escrever novamente…">${esc(repair.draft)}</textarea>${repair.checked?'<p class="repair-status" role="status">Ainda há um ajuste. Confira a resposta aceita e tente novamente, ou continue quando quiser.</p>':''}<button class="btn secondary" data-learning="repair-check">Conferir correção</button></div>`;
+}
+function openRepair(){
+ if(!repairAvailable())return;
+ const mini=state.active.mini;
+ mini.repair={open:true,draft:'',checked:false,correct:false,key:mini.feedback.key||currentItem().key};
+ save();renderExercise();$('#repair-answer')?.focus();
+}
+function checkRepair(){
+ if(!repairAvailable())return;
+ const mini=state.active.mini,repair=mini.repair;
+ if(!repair?.open||repair.correct)return;
+ const question=currentGame().items.find(item=>item.key===repair.key);
+ if(!question)return;
+ repair.draft=String($('#repair-answer')?.value||repair.draft||'').slice(0,2000);
+ if(!repair.draft.trim())return;
+ repair.checked=true;repair.correct=checkAnswer(question,repair.draft);
+ save();renderExercise();
+ if(!repair.correct)$('#repair-answer')?.focus();
+}
+const submitBeforeLearningHelp=submit;
+submit=function(skip=false){
+ if(!skip&&document.activeElement?.id==='repair-answer'){checkRepair();return;}
+ if(!skip||!state.active||!LINEAR_TYPES.includes(currentGame().type))return submitBeforeLearningHelp(skip);
+ const active=state.active,mini=active.mini,game=currentGame();
+ if(active.feedback||mini.feedback)return;
+ if(game.type==='redpen'&&mini.target===null)mini.target=game.items.findIndex(item=>!mini.results.some(result=>result.key===item.key));
+ const question=currentItem();
+ const feedback=record(question,false,'Não sei ainda');
+ if(!feedback)return;
+ feedback.skipped=true;
+ if(mini.results.length===game.items.length)endActivity();
+ else{save();renderExercise();}
+};
+document.addEventListener('click',event=>{
+ const action=event.target.closest('[data-learning]')?.dataset.learning;
+ if(action==='repair-open')openRepair();else if(action==='repair-check')checkRepair();
+});
+document.addEventListener('input',event=>{
+ if(event.target.id!=='repair-answer'||!repairAvailable()||!state.active.mini.repair)return;
+ const repair=state.active.mini.repair;repair.draft=event.target.value.slice(0,2000);repair.checked=false;repair.correct=false;save();
+});
+// A correction can be open after the activity has already been graded.
+// Handle its Enter before the shared shortcut can advance to the next activity.
+document.addEventListener('keydown',event=>{
+ if(event.target.id!=='repair-answer'||event.key!=='Enter'||event.shiftKey||event.isComposing||view!=='exercise'||$('#modal').open)return;
+ event.preventDefault();event.stopImmediatePropagation();checkRepair();
+},true);
+function learningRecapHTML(result){
+ if(result.mode!=='session')return '';
+ const rules=[...new Set((result.results||[]).flatMap(answer=>(answer.missed||[]).map(key=>SUBITEMS[key]?.rule)).filter(Boolean))].slice(0,2);
+ return `<section class="learning-recap"><h2>O que você praticou</h2><p>${esc(UNITS[result.unit].canDo)}</p>${rules.length?`<h3>Para reforçar</h3><ul>${rules.map(rule=>`<li>${esc(rule)}</li>`).join('')}</ul>`:''}</section>`;
+}
+
 function focusHeaderHTML(active){
  const placement=active.mode==='placement',completed=active.i+(active.feedback?1:0),total=placement?18:active.ids.length;
  const label=placement?'Descobrindo seu nível':UNITS[active.unit].title;
@@ -112,9 +190,9 @@ renderExercise=function(){
  const answered=Boolean(active.feedback||feedback),canSubmit=['chat','tone','trap','reading','surgery'].includes(game.type)||(game.type==='redpen'&&mini.target!==null);
  const focused=document.activeElement,slotFocus=focused?.dataset?.slot;
  const helper=game.type==='story'?'Escolha uma resposta para continuar.':game.type==='redpen'?'Toque no trecho que precisa de correção.':'Escolha onde a palavra se encaixa.';
- const lesson=active.mode==='session'&&active.i===0?`<details class="focus-lesson"><summary>${icon('book')}Uma dica para esta unidade <span>+</span></summary><p>${esc(UNITS[active.unit].lesson)}</p><p lang="en">${esc(UNITS[active.unit].example)}</p></details>`:'';
+ const questionNumber=Math.min(game.items.length,Math.max(1,mini.results.length+(feedback&&!feedback.extra?0:1)));
  const action=answered?`<button class="btn ${(active.feedback?.correct??feedback?.correct)?'correct':''}" data-action="advance" id="primary-action">${active.feedback&&active.i===active.ids.length-1&&active.mode!=='placement'?'Ver resultado':'Continuar'}${icon('arrow')}</button>`:canSubmit?'<button class="btn" data-action="submit" id="primary-action" disabled>Verificar resposta</button>':`<span class="focus-action-hint">${helper}</span>`;
- $('#app').innerHTML=`<div class="exercise-wrap">${focusHeaderHTML(active)}<section class="question-card game-stage" id="question-card"><div class="focus-activity-label"><span>${icon(type[1])}${type[0]}</span><span>${game.level}</span></div><h1 id="activity-title" tabindex="-1">${esc(game.title)}</h1><div class="focus-stage">${stageHTML(game)}</div>${feedback?`<div class="focus-feedback" tabindex="-1">${feedbackBlock(feedback)}</div>`:''}${lesson}</section><footer class="focus-actions ${answered?'has-feedback':''}"><div class="focus-actions-inner">${answered?'':`<button class="btn ghost" data-action="skip">Pular</button>`}${action}</div></footer></div>`;
+ $('#app').innerHTML=`<div class="exercise-wrap">${focusHeaderHTML(active)}<section class="question-card game-stage" id="question-card"><div class="focus-activity-label"><span>${icon(type[1])}${type[0]}</span><span aria-label="Nível ${game.level}, pergunta ${questionNumber} de ${game.items.length}">${game.level} · ${questionNumber}/${game.items.length}</span></div><h1 id="activity-title" tabindex="-1">${esc(game.title)}</h1><div class="focus-stage">${stageHTML(game)}</div>${feedback?`<div class="focus-feedback" tabindex="-1">${feedbackBlock(feedback)}${repairHTML()}</div>`:learningHelpHTML(game)}</section><footer class="focus-actions ${answered?'has-feedback':''}"><div class="focus-actions-inner">${answered?'':`<button class="btn ghost" data-action="skip">Não sei</button>`}${action}</div></footer></div>`;
  updateSubmit();observeActivityActions();
  if(answered){$('#primary-action')?.focus({preventScroll:true});requestAnimationFrame(()=>{if(view==='exercise'&&state.active===active&&state.active.mini===mini)$('.focus-feedback')?.scrollIntoView({block:'nearest',behavior:'instant'});});}
  else if(slotFocus!==undefined&&/^\d+$/.test(slotFocus))$(`[data-slot="${slotFocus}"]`)?.focus({preventScroll:true});
@@ -187,6 +265,7 @@ renderSummary=function(){
  const mascotLine=placement?result.level>=4?'Você já navega por estruturas avançadas. Agora vamos lapidar precisão e nuance.':result.level>=2?'Você já consegue lidar com várias situações reais. Vamos consolidar sua próxima etapa.':'Todo começo conta. Agora você tem um ponto de partida feito para você.':result.passed?'Mais uma etapa virou conhecimento seu.': 'Errar apontou o próximo ajuste. Vamos usá-lo no caminho.';
  $('#app').innerHTML=`<section class="learning-result ${placement?'placement-result':''} ${result.passed?'result-success':'result-practice'}"><div class="result-mascot"><img src="assets/papagaio-azul.png" alt="Papagaio Azul acompanhando seu percurso"></div><span class="eyebrow">${placement?'DESCOBERTA CONCLUÍDA':result.passed?'ETAPA CONCLUÍDA':'UM PASSO DE APRENDIZADO'}</span><h1>${title}</h1><p class="result-description">${description}</p>${placement?`<div class="level-result-orbit"><span class="orbit-glow"></span><strong>${LEVELS[result.level]}</strong><span>PONTO DE PARTIDA</span></div><div class="result-level-row">${LEVELS.map((level,index)=>`<span class="assessment-level ${index<result.level?'passed':index===result.level?'current':''}">${level}</span>`).join('')}</div>`:`<div class="unit-result"><span class="unit-result-number">${String(result.unit+1).padStart(2,'0')}</span><div><strong>${esc(UNITS[result.unit].title)}</strong><span>${Math.round(result.ratio*100)}% de precisão · ${result.correct} de ${result.total} atividades</span></div><span class="unit-result-xp">+${result.xp} XP</span></div>`}<div class="mascot-message"><span class="mascot-message-mark">✦</span><p>${mascotLine}</p></div><button class="btn linear-cta" data-action="next">${placement?`Começar por ${LEVELS[result.level]}`:complete?'Ver percurso completo':result.passed?'Seguir para a próxima unidade':'Continuar nesta unidade'} ${icon('arrow')}</button><p class="result-note">${placement?'Estimativa de entrada baseada somente em leitura e escrita.':`Seu próximo passo: ${task.mode==='complete'?'fim do percurso':task.mode==='session'?`unidade ${task.unit+1} · ${LEVELS[task.level]}`:'retomar sua sessão'}.`}</p></section>`;
  if(!placement){const xp=$('.unit-result-xp');if(xp)xp.setAttribute('aria-label',`${result.xp} XP conquistados`);}
+ $('.learning-result .mascot-message')?.insertAdjacentHTML('beforebegin',learningRecapHTML(result));
  $('#app').insertAdjacentHTML('afterbegin',`<div class="result-top"><button class="text-btn" data-nav="home">${icon('close')}Voltar ao início</button></div>`);
 };
 
